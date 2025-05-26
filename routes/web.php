@@ -8,6 +8,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PenanggungjawabController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController; // Jangan lupa import controller profil
 use App\Models\Inventaris;
 
@@ -27,8 +28,11 @@ Route::post('/register-progress', [RegisterController::class, 'progress'])->name
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login-progress', [LoginController::class, 'progress'])->name('login.progress');
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+   Route::get('/anggota/dashboard', [UserController::class, 'index'])->name('anggota.dashboard');
+   Route::get('/anggota/dashboard', [UserController::class, 'index'])->middleware('role:2');
+
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -56,4 +60,6 @@ Route::middleware('auth')->group(function () {
     // Tambahkan routes Profil & Ganti Password
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/settings/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-});
+// });
+
+  

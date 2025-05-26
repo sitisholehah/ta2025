@@ -13,24 +13,21 @@ class RegisterController extends Controller
         return view('Admin.register'); 
     }
 
-  
-        public function progress(Request $request)
+    public function progress(Request $request)
     {
-        
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed|min:6',
         ]);
 
-      
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => 2, // otomatis set role_id ke 2
         ]);
 
-        
         return redirect()->route('login')->with('success', 'Registration successful. Please login.');
     }
 }

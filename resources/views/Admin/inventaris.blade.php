@@ -64,11 +64,11 @@
 
     {{-- Judul tabel dan tombol data baru --}}
     @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
     <div class="mb-3">
-            <h1 class="h3">Data Inventaris</h1>
-            <a href="{{ route('inventaris.create') }}" class="btn btn-primary mb-3">Tambah Data Baru</a>
+        <h1 class="h3">Data Inventaris</h1>
+        <a href="{{ route('inventaris.create') }}" class="btn btn-primary mb-3">Tambah Data Baru</a>
     </div>
     <div class="card">
         <div class="card-body">
@@ -120,30 +120,33 @@
                                 <td>{{ $item->keterangan }}</td>
                                 <td>
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_barang != null ? asset('storage/foto/' . $item->photo_barang) : asset('img/foto-tidak-ada.png') }}"
+                                        src="{{ $item->photo_barang != null ? asset('storage/foto_inventaris/' . $item->photo_barang) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
+
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_serial != null ? asset('storage/foto/' . $item->photo_serial) : asset('img/foto-tidak-ada.png') }}"
+                                        src="{{ $item->photo_serial != null ? asset('storage/foto_inventaris/' . $item->photo_serial) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-                                
+
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_nota != null ? asset('storage/foto/' . $item->photo_nota) : asset('img/foto-tidak-ada.png') }}"
+                                        src="{{ $item->photo_nota != null ? asset('storage/foto_inventaris/' . $item->photo_nota) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-                                
+
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_lainnya != null ? asset('storage/foto/' . $item->photo_lainnya) : asset('img/foto-tidak-ada.png') }}"
+                                        src="{{ $item->photo_Lainnya != null ? asset('storage/foto_inventaris/' . $item->photo_Lainnya) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
+
                                 </td>
                                 <td><label class="badge bg-danger">Pending</label></td>
                                 <td>
-                            <a href="{{ route('inventaris.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('inventaris.destroy', $item->id) }}" method="POST"
-                                style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Yakin ingin menghapus?')"
-                                    class="btn btn-danger btn-sm">Hapus</button>
-                            </form>
+                                    <a href="{{ route('inventaris.edit', $item->id) }}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('inventaris.destroy', $item->id) }}" method="POST"
+                                        style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus?')"
+                                            class="btn btn-danger btn-sm">Hapus</button>
+                                    </form>
                             </tr>
                         @endforeach
                     </tbody>
