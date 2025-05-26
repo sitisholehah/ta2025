@@ -16,9 +16,10 @@
                 <label for="id_peminjam" class="form-label">ID Peminjam</label>
                 <select name="id_peminjam" id="id_peminjam" class="form-control" required>
                     <option value="">-- Pilih Peminjam --</option>
-                    @foreach ($peminjams as $peminjam)
-                        <option value="{{ $peminjam->id }}">{{ $peminjam->nama }}</option>
+                    @foreach ($peminjamans as $peminjaman)
+                        {{ $peminjaman->nama }}
                     @endforeach
+
                 </select>
             </div>
 

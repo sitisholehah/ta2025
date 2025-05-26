@@ -94,6 +94,9 @@
                             <th>Tgl Expired Garansi</th>
                             <th>Keterangan</th>
                             <th>Foto</th>
+                            <th>Foto</th>
+                            <th>Foto</th>
+                            <th>Foto</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -120,21 +123,23 @@
                                 <td>{{ $item->keterangan }}</td>
                                 <td>
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_barang != null ? asset('storage/foto_inventaris/' . $item->photo_barang) : '' }}"
+                                        src="{{ $item->photo_barang != null ? asset('./' . $item->photo_barang) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-
+                                </td>
+                                <td>
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_serial != null ? asset('storage/foto_inventaris/' . $item->photo_serial) : '' }}"
+                                        src="{{ $item->photo_serial != null ? asset('./' . $item->photo_serial) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-
+                                </td>
+                                <td>
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_nota != null ? asset('storage/foto_inventaris/' . $item->photo_nota) : '' }}"
+                                        src="{{ $item->photo_nota != null ? asset('./' . $item->photo_nota) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-
+                                </td>
+                                <td>
                                     <img class="card-img-top"
-                                        src="{{ $item->photo_Lainnya != null ? asset('storage/foto_inventaris/' . $item->photo_Lainnya) : '' }}"
+                                        src="{{ $item->photo_Lainnya != null ? asset('./' . $item->photo_Lainnya) : '' }}"
                                         alt="" style="width: 100px; height: auto;" />
-
                                 </td>
                                 <td><label class="badge bg-danger">Pending</label></td>
                                 <td>

@@ -11,13 +11,17 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     // Halaman dashboard user
-   public function index()
+  public function index()
 {
+    
     $user = Auth::user();
-    $inventaris = Inventaris::where('penanggungjawab', $user->name)->get();
+
+   $inventaris = Inventaris::all();
+
 
     return view('anggota.dashboard', compact('inventaris'));
 }
+
 
 
     // Tampilkan profil user yang sedang login

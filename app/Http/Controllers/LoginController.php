@@ -36,7 +36,7 @@ class LoginController extends Controller
             if ($roleId === 1) {
                 return redirect('/');
             } elseif ($roleId === 2) {
-                return redirect('anggota/profile');
+                return redirect()->route('anggota.dashboard');
             } else {
                 Auth::logout();
                 abort(403, 'Role tidak dikenali.');

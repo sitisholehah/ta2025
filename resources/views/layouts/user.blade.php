@@ -97,7 +97,7 @@
                     <span class="nav-link">Navigation</span>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="{{ route('dashboard') }}">
+                    <a class="nav-link" href="">
                         <span class="menu-icon">
                             <i class="mdi mdi-view-dashboard"></i>
                         </span>
@@ -127,7 +127,7 @@
                 </li>
 
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="{{ route('inventaris') }}">
+                    <a class="nav-link" href="{{ route('anggota.dashboard') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-package-variant-closed"></i>
                         </span>
@@ -135,14 +135,14 @@
                     </a>
                 </li>
 
-                <li class="nav-item menu-items">
+                {{-- <li class="nav-item menu-items">
                     <a class="nav-link" href="{{ route('karyawan') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-account-group"></i>
                         </span>
                         <span class="menu-title">Karyawan</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="nav-item menu-items">
                     <a class="nav-link" href="{{ route('peminjaman') }}">

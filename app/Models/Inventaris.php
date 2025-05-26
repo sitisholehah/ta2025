@@ -15,6 +15,7 @@ class Inventaris extends Model
     protected $keyType = 'string'; // sesuaikan, misal jika ID-nya pakai teks
 
     protected $fillable = [
+        'id',
         'kode_barang',
         'nama_barang',
         'deskripsi_barang',

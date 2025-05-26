@@ -1,4 +1,4 @@
-@extends('layouts.welcome')
+@extends('layouts.user')
 
 @section('content')
    <div class="container mt-4">
@@ -63,9 +63,9 @@
     </div>
 
     {{-- Judul tabel dan tombol data baru --}}
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+    @endif --}}
     <div class="mb-3">
         <h1 class="h3">Data Inventaris</h1>
         {{-- <a href="{{ route('inventaris.create') }}" class="btn btn-primary mb-3">Tambah Data Baru</a> --}}
