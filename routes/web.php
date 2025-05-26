@@ -30,8 +30,8 @@ Route::post('/login-progress', [LoginController::class, 'progress'])->name('logi
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-//    Route::get('/anggota/dashboard', [UserController::class, 'index'])->name('anggota.dashboard');
-//    Route::get('/anggota/dashboard', [UserController::class, 'index'])->middleware('role:2');
+    //    Route::get('/anggota/dashboard', [UserController::class, 'index'])->name('anggota.dashboard');
+    //    Route::get('/anggota/dashboard', [UserController::class, 'index'])->middleware('role:2');
 
 
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -52,10 +52,11 @@ Route::middleware('auth')->group(function () {
     // Routes Inventaris
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris');
     Route::get('/inventaris/create', [InventarisController::class, 'create'])->name('inventaris.create');
-    Route::post('/inventaris/store', [InventarisController::class, 'store'])->name('inventaris.store');
+    Route::post('/inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
     Route::get('/inventaris/{id_inventaris}/edit', [InventarisController::class, 'edit'])->name('inventaris.edit');
     Route::put('/inventaris/{id_inventaris}', [InventarisController::class, 'update'])->name('inventaris.update');
     Route::delete('/inventaris/{id_inventaris}', [InventarisController::class, 'destroy'])->name('inventaris.destroy');
+
 
     // Tambahkan routes Profil & Ganti Password
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
@@ -69,5 +70,3 @@ Route::middleware(['auth'])->prefix('anggota')->group(function () {
     Route::post('/profile/update', [UserController::class, 'profileUpdate'])->name('anggota.profile.update');
     Route::get('/user/{slug}', [UserController::class, 'show'])->name('anggota.user.show');
 });
-
-  

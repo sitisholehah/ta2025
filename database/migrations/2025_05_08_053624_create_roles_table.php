@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name', 100);
+            $table->id(); // Auto-increment BIGINT UNSIGNED (sama dengan users.role_id)
+            $table->string('name', 100)->unique(); // Nama role harus unik
             $table->timestamps();
         });
     }

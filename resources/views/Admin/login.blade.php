@@ -59,7 +59,7 @@
                     <label>Username</label>
                     <input
                       type="text"
-                      name="name"
+                      name="email"
                       class="form-control p_input"
                       required
                       autofocus

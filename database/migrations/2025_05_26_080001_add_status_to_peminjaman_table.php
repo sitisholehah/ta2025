@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::table('peminjaman', function (Blueprint $table) {
             $table->string('status')->default('Dipinjam');
-            $table->string('kondisi_barang')->default('Baik');
         });
     }
 
@@ -27,7 +26,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('peminjaman', function (Blueprint $table) {
-            $table->dropColumn(['status', 'kondisi_barang']);
+            //
         });
     }
 };
+

@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
     /**
-     * Tampilkan halaman login.
+     * Tampilkan form login.
      */
     public function showLoginForm()
     {
-        return view('admin.login'); // Ganti dengan path blade yang sesuai
+        return view('admin.login'); // Sesuaikan dengan lokasi view login Anda
     }
 
     /**
@@ -22,38 +22,40 @@ class LoginController extends Controller
     public function progress(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'password' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
         ]);
 
-        $credentials = $request->only('name', 'password');
+        $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            $roleId = Auth::user()->role_id;
+            $user = Auth::user();
 
-            if ($roleId === 1) {
-                return redirect('/');
-            } elseif ($roleId === 2) {
-                return redirect()->route('anggota.dashboard');
+            // Arahkan berdasarkan role_id
+            if ($user->role_id === 1) {
+                return redirect()->route('dashboard'); // Buat route ini di web.php
+            } elseif ($user->role_id === 2) {
+                return redirect()->route('anggota.dashboard'); // Buat route ini juga
             } else {
                 Auth::logout();
                 abort(403, 'Role tidak dikenali.');
             }
         }
 
-        Session::flash('status', 'Username atau Password salah');
-        return redirect('/login');
+        // Gagal login
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->withInput();
     }
 
     /**
-     * Logout user dan hapus sesi.
+     * Logout user dan hapus session.
      */
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

@@ -18,12 +18,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->unsignedTinyInteger('role_id')->default(2);
+            $table->unsignedBigInteger('role_id')->default(2);
             $table->timestamps();
+            // Foreign key constraint
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 
-    /**hei
+    /**
      * Reverse the migrations.
      *
      * @return void
