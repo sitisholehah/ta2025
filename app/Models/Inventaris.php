@@ -20,6 +20,7 @@ class Inventaris extends Model
         'nama_barang',
         'deskripsi_barang',
         'kelompok_barang',
+        'departemen_pemilik',
         'merk',
         'tipe_part_number',
         'serial_number',

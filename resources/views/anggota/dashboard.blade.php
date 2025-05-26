@@ -14,7 +14,7 @@
         @endif
 
         {{-- Form pencarian --}}
-        {{-- <div class="card mb-4">
+        <div class="card mb-4">
             <div class="card-body">
                 <table class="table table-borderless mb-0">
                     <thead>
@@ -48,9 +48,9 @@
                                     <button class="btn btn-secondary btn-sm mr-2">
                                         <i class="bi bi-arrow-repeat"></i> Refresh <i></i>
                                     </button>
-                                    <button class="btn btn-secondary btn-sm mr-2">
+                                    {{-- <button class="btn btn-secondary btn-sm mr-2">
                                         <i class="bi bi-printer"></i> Cetak <i></i>
-                                    </button>
+                                    </button> --}}
                                 </div>
                                 <link rel="stylesheet"
                                     href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -59,7 +59,7 @@
             </tr>
             </tbody>
             </table>
-        </div> --}}
+        </div>
     </div>
 
     {{-- Judul tabel dan tombol data baru --}}

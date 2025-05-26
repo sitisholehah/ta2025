@@ -59,58 +59,62 @@ public function store(Request $request)
     return redirect()->route('inventaris')->with('success', 'Data Inventaris berhasil disimpan.');
 }
 
-    // Tampilkan form edit
-    public function edit($id)
-    {
-        $inventaris = Inventaris::where('id', $id)->firstOrFail();
-        return view('Admin.inventarisedit', compact('inventaris'));
-    }
+   // Tampilkan form edit
+public function edit($id)
+{
+    $inventaris = Inventaris::findOrFail($id);
+    return view('Admin.inventarisedit', compact('inventaris'));
+}
 
-    // Update data inventaris
-    public function update(Request $request, $id)
-    {
-        $inventaris = Inventaris::where('id', $id)->firstOrFail();
+// Update data inventaris
+public function update(Request $request, $id)
+{
+    $inventaris = Inventaris::findOrFail($id);
 
-        $validated = $request->validate([
-           'kode_barang' => 'required|string|max:100|unique:inventaris,kode_barang,' . $inventaris->id,
-            'nama_barang'             => 'required|string|max:255',
-            'deskripsi_barang'        => 'required|string',
-            'kelompok_barang'         => 'required|string',
-            'departemen_pemilik'      => 'nullable|string',
-            'merk'                    => 'nullable|string',
-            'tipe_part_number'        => 'nullable|string',
-            'serial_number'           => 'nullable|string',
-            'tanggal_pembelian'       => 'nullable|date',
-            'harga'                   => 'nullable|numeric',
-            'tempat_pembelian'        => 'nullable|string',
-            'penanggungjawab'         => 'nullable|string',
-            'kondisi_barang'          => 'nullable|string',
-            'lokasi_barang'           => 'nullable|string',
-            'tanggal_expired_garansi' => 'nullable|date',
-            'keterangan'              => 'nullable|string',
-            'photo_barang'            => 'nullable|image|mimes:jpeg,png,jpg',
-            'photo_serial'            => 'nullable|image|mimes:jpeg,png,jpg',
-            'photo_nota'              => 'nullable|image|mimes:jpeg,png,jpg',
-            'photo_lainnya'           => 'nullable|image|mimes:jpeg,png,jpg',
-        ]);
+    $validated = $request->validate([
+        'kode_barang'             => 'required|string|max:100|unique:inventaris,kode_barang,' . $inventaris->id,
+        'nama_barang'             => 'required|string|max:255',
+        'deskripsi_barang'        => 'required|string',
+        'kelompok_barang'         => 'required|string',
+        'departemen_pemilik'      => 'nullable|string',
+        'merk'                    => 'nullable|string',
+        'tipe_part_number'        => 'nullable|string',
+        'serial_number'           => 'nullable|string',
+        'tanggal_pembelian'       => 'nullable|date',
+        'harga'                   => 'nullable|numeric',
+        'tempat_pembelian'        => 'nullable|string',
+        'penanggungjawab'         => 'nullable|string',
+        'kondisi_barang'          => 'nullable|string',
+        'lokasi_barang'           => 'nullable|string',
+        'tanggal_expired_garansi' => 'nullable|date',
+        'keterangan'              => 'nullable|string',
+        'photo_barang'            => 'nullable|image|mimes:jpeg,png,jpg',
+        'photo_serial'            => 'nullable|image|mimes:jpeg,png,jpg',
+        'photo_nota'              => 'nullable|image|mimes:jpeg,png,jpg',
+        'photo_lainnya'           => 'nullable|image|mimes:jpeg,png,jpg',
+    ]);
 
-        foreach (['photo_barang', 'photo_serial', 'photo_nota', 'photo_lainnya'] as $photoField) {
-            if ($request->hasFile($photoField)) {
-                // Hapus file lama jika ada
-                if ($inventaris->$photoField) {
-                    $oldPath = str_replace('storage/', 'public/', $inventaris->$photoField);
-                    Storage::delete($oldPath);
-                }
-
-                $path = $request->file($photoField)->store('public/foto_inventaris');
-                $validated[$photoField] = str_replace('public/', 'storage/', $path);
+    // Tangani upload file baru & hapus file lama jika ada
+    foreach (['photo_barang', 'photo_serial', 'photo_nota', 'photo_lainnya'] as $photoField) {
+        if ($request->hasFile($photoField)) {
+            // Hapus file lama jika ada
+            if (!empty($inventaris->$photoField)) {
+                $oldPath = str_replace('storage/', 'public/', $inventaris->$photoField);
+                Storage::delete($oldPath);
             }
+
+            // Simpan file baru
+            $path = $request->file($photoField)->store('public/foto_inventaris');
+            $validated[$photoField] = str_replace('public/', 'storage/', $path);
         }
-
-        $inventaris->update($validated);
-
-        return redirect()->route('inventaris')->with('success', 'Data Inventaris berhasil diperbarui.');
     }
+
+    // Update data
+    $inventaris->update($validated);
+
+    return redirect()->route('inventaris')->with('success', 'Data Inventaris berhasil diperbarui.');
+}
+
 
     // Hapus data inventaris
     public function destroy($id)
