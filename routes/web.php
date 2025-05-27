@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
 // Untuk user yang sudah login (role anggota)
 Route::middleware(['auth'])->prefix('anggota')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('anggota.dashboard');
-    Route::get('/profile', [UserController::class, 'profile'])->name('anggota.profile');
+    Route::get('/profile', [UserController::class, 'profile'])->name('anggota.UserDetail');
     Route::post('/profile/update', [UserController::class, 'profileUpdate'])->name('anggota.profile.update');
     Route::get('/user/{slug}', [UserController::class, 'show'])->name('anggota.user.show');
 });

@@ -122,24 +122,32 @@
                                 <td>{{ $item->tanggal_expired_garansi }}</td>
                                 <td>{{ $item->keterangan }}</td>
                                 <td>
-                                    <img class="card-img-top"
-                                        src="{{ $item->photo_barang != null ? asset('./' . $item->photo_barang) : '' }}"
-                                        alt="" style="width: 100px; height: auto;" />
+                                    <a href="{{ asset($item->photo_barang) }}" target="_blank">
+                                        <img src="{{ $item->photo_barang ? asset($item->photo_barang) : '' }}"
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.2);"
+                                            alt="Foto barang" />
+                                    </a>
                                 </td>
                                 <td>
-                                    <img class="card-img-top"
-                                        src="{{ $item->photo_serial != null ? asset('./' . $item->photo_serial) : '' }}"
-                                        alt="" style="width: 100px; height: auto;" />
+                                    <a href="{{ asset($item->photo_serial) }}" target="_blank">
+                                        <img src="{{ $item->photo_serial ? asset($item->photo_serial) : '' }}"
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.2);"
+                                            alt="Foto serial" />
+                                    </a>
                                 </td>
                                 <td>
-                                    <img class="card-img-top"
-                                        src="{{ $item->photo_nota != null ? asset('./' . $item->photo_nota) : '' }}"
-                                        alt="" style="width: 100px; height: auto;" />
+                                    <a href="{{ asset($item->photo_nota) }}" target="_blank">
+                                        <img src="{{ $item->photo_nota ? asset($item->photo_nota) : '' }}"
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.2);"
+                                            alt="Foto nota" />
+                                    </a>
                                 </td>
                                 <td>
-                                    <img class="card-img-top"
-                                        src="{{ $item->photo_Lainnya != null ? asset('./' . $item->photo_Lainnya) : '' }}"
-                                        alt="" style="width: 100px; height: auto;" />
+                                    <a href="{{ asset($item->photo_lainnya) }}" target="_blank">
+                                        <img src="{{ $item->photo_lainnya ? asset($item->photo_lainnya) : '' }}"
+                                            style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.2);"
+                                            alt="Foto Lainnya" />
+                                    </a>
                                 </td>
                                 <td><label class="badge bg-danger">Pending</label></td>
                                 <td>
