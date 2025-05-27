@@ -50,9 +50,10 @@
                                 <span class="count bg-success"></span>
                             </div>
                             <div class="profile-name">
-                                <h5 class="mb-0 font-weight-normal">Lukmanul Hakim</h5>
-                                <span>Karyawan</span>
+                                <h5 class="mb-0 font-weight-normal">{{ Auth::user()->name }}</h5>
+                                <span>{{ Auth::user()->role->name ?? 'Role belum diatur' }}</span>
                             </div>
+
                         </div>
                         <a href="#" id="profile-dropdown" data-toggle="dropdown"><i
                                 class="mdi mdi-dots-vertical"></i></a>
@@ -97,7 +98,7 @@
                     <span class="nav-link">Navigation</span>
                 </li>
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="{{route('anggota.UserDetail')}}">
+                    <a class="nav-link" href="{{ route('anggota.UserDetail') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-view-dashboard"></i>
                         </span>

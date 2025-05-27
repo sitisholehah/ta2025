@@ -53,9 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/peminjaman/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
     Route::delete('/peminjaman/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
     // Untuk User
-Route::middleware(['auth', 'role:1,2'])->group(function () {
+// Route::middleware(['auth', 'role:1,2'])->group(function () {
 
-});
+// });
     
 
     // Routes Inventaris

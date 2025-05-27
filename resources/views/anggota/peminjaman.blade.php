@@ -9,63 +9,83 @@
         @endif
 
         {{-- Form Input Peminjaman --}}
-        <form action="{{ route('peminjaman.store') }}" method="POST">
-            @csrf
-
-            {{-- Auto-filled hidden inputs for ID and name --}}
-            <div class="mb3">
-                <label for="id_peminjam" class="form-label">ID Peminjam</label>
-                <input type="text" name="id_peminjam" id="id_peminjam" class="form-control" value="{{ Auth::id() }}"
-                    readonly>
-            </div>
-            <div class="mb3">
-                <label for="nama_peminjam" class="form-label">Nama Peminjam</label>
-                <input type="text" name="nama_peminjam" id="nama_peminjam" class="form-control"
-                    value="{{ Auth::user()->name }}" readonly>
-                {{-- <input type="hidden" name="id_peminjam" value="{{ Auth::id() }}">
-    <input type="hidden" name="nama_peminjam" value="{{ Auth::user()->name }}"> --}}
-
-                <div class="mb-3">
-                    <label for="nama_barang" class="form-label">Nama Barang</label>
-                    <input type="text" name="nama_barang" id="nama_barang" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="jumlah" class="form-label">Jumlah</label>
-                    <input type="text" name="jumlah" id="jumlah" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="divisi" class="form-label">Divisi</label>
-                    <input type="text" name="divisi" id="divisi" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="penanggungjawab" class="form-label">Penanggungjawab</label>
-                    <input type="text" name="penanggungjawab" id="penanggungjawab" class="form-control" required>
-                </div>
-
-
-                <div class="mb-3">
-                    <label for="tanggal_pinjam" class="form-label">Tanggal Peminjaman</label>
-                    <input type="date" name="tanggal_pinjam" id="tanggal_pinjam" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="tanggal_kembali" class="form-label">Tanggal Kembali</label>
-                    <input type="date" name="tanggal_kembali" id="tanggal_kembali" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="keterangan" class="form-label">Keterangan (Opsional)</label>
-                    <textarea name="keterangan" id="keterangan" class="form-control" rows="3"></textarea>
-                </div>
-
-                <div class="d-flex me-3">
-                    <button type="submit" class="btn btn-success mr-2">Simpan</button>
-                    <a href="{{ url()->previous() }}" class="btn btn-danger">Cancel</a>
-                </div>
-        </form>
-
+        
+ @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    <div class="mb-3">
+        <h1 class="h3">Data Inventaris</h1>
+        <a href="{{ route('user.peminjaman.create') }}" class="btn btn-primary mb-3">Tambah Data Baru</a>
     </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Nama Peminjam</th>
+                            <th>Nama Barang</th>
+                            <th>jumlah</th>
+                            <th>divisi</th>
+                            <th>penanggungjawab</th>
+                            <th>tanggal kpinjam</th>
+                            <th>tanggal kembali</th>
+                             <th>tanggal kembali</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($peminjamans as $item)
+                            <tr>
+                                <td>{{ $item->id_peminjam }}</td>
+                                <td>{{ $item->nama_peminjam }}</td>
+                                <td>{{ $item->nama_barang }}</td>
+                                <td>{{ $item->jumlah }}</td>
+                                <td>{{ $item->divisi}}</td>
+                                <td>{{ $item->penanggungjawab }}</td>
+                                <td>{{ $item->tanggal_pinjam }}</td>
+                                <td>{{ $item->tanggal_kembali }}</td>
+                                <td>{{ $item->keterangan }}</td>
+                                <td>{{ $item->status }}</td>
+                                
+                                <td><label class="badge bg-danger">Pending</label></td>
+                                <td>
+                                    <a href="{{ route('user.peminjaman.edit', $item->id) }}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('user.peminjaman.destroy', $item->id) }}" method="POST"
+                                        style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus?')"
+                                            class="btn btn-danger btn-sm">Hapus</button>
+                                    </form>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-end mt-3">
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Previous</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div> <!-- end card-body -->
+    </div>
+    </div>
+
+
 @endsection

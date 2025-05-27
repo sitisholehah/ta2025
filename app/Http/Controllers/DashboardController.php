@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Inventaris;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Ambil semua data peminjaman urut tanggal pinjam terbaru
-        $historiPeminjaman = Peminjaman::orderBy('tanggal_pinjam', 'desc')->get();
-
-        return view('Admin.dashboard', compact('historiPeminjaman'));
+          $peminjamans = Peminjaman::with('inventaris')
+            ->where('id_peminjam', Auth::id())
+            ->get();
+$peminjamans = Peminjaman::all();
+        return view('Admin.dashboard', compact('peminjamans'));
     }
 }

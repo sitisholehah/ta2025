@@ -4,49 +4,55 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
+use App\Models\Inventaris;
 use Illuminate\Support\Facades\Auth;
 
 class UserPeminjamanController extends Controller
 {
     public function index()
     {
-        // Ambil data peminjaman milik user yang sedang login
-        $peminjamans = Peminjaman::where('id_peminjam', Auth::id())->get();
+        // Ambil data peminjaman milik user yang sedang login + relasi inventaris
+        $peminjamans = Peminjaman::with('inventaris')
+            ->where('id_peminjam', Auth::id())
+            ->get();
 
         return view('anggota.peminjaman', compact('peminjamans'));
     }
 
     public function create()
     {
-        return view('anggota.peminjaman_create'); // Sesuaikan dengan file view yang kamu miliki
+        // Ambil semua data barang dari inventaris untuk dropdown
+        $inventaris = Inventaris::all();
+
+        return view('anggota.peminjamanadd', compact('inventaris'));
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'nama_barang'       => 'required|string|max:255',
-            'jumlah'            => 'required|integer|min:1',
-            'divisi'            => 'required|string|max:255',
-            'penanggungjawab'   => 'required|string|max:255',
-            'tanggal_pinjam'    => 'required|date',
-            'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
-            'keterangan'        => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'kode_barang'       => 'required|exists:inventaris,kode_barang',
+        'jumlah'            => 'required|integer|min:1',
+        'divisi'            => 'required|string|max:255',
+        'penanggungjawab'   => 'required|string|max:255',
+        'tanggal_pinjam'    => 'required|date',
+        'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
+        'keterangan'        => 'nullable|string',
+    ]);
 
-        Peminjaman::create([
-            'id_peminjam'       => Auth::id(),
-            'nama_peminjam'     => Auth::user()->name,
-            'nama_barang'       => $request->nama_barang,
-            'jumlah'            => $request->jumlah,
-            'divisi'            => $request->divisi,
-            'penanggungjawab'   => $request->penanggungjawab,
-            'tanggal_pinjam'    => $request->tanggal_pinjam,
-            'tanggal_kembali'   => $request->tanggal_kembali,
-            'keterangan'        => $request->keterangan,
-        ]);
+    Peminjaman::create([
+        'id_peminjam'       => Auth::id(),
+        'nama_peminjam'     => Auth::user()->name, 
+        'kode_barang'       => $request->kode_barang,
+        'jumlah'            => $request->jumlah,
+        'divisi'            => $request->divisi,
+        'penanggungjawab'   => $request->penanggungjawab,
+        'tanggal_pinjam'    => $request->tanggal_pinjam,
+        'tanggal_kembali'   => $request->tanggal_kembali,
+        'keterangan'        => $request->keterangan,
+    ]);
 
-        return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil ditambahkan.');
-    }
+    return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil ditambahkan.');
+}
 
     public function edit($id)
     {
@@ -54,13 +60,15 @@ class UserPeminjamanController extends Controller
             ->where('id_peminjam', Auth::id())
             ->firstOrFail();
 
-        return view('anggota.peminjaman_edit', compact('peminjaman')); // Sesuaikan view jika beda
+        $inventaris = Inventaris::all(); // Untuk dropdown pilihan barang
+
+        return view('anggota.peminjaman_edit', compact('peminjaman', 'inventaris'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama_barang'       => 'required|string|max:255',
+            'kode_barang'       => 'required|exists:inventaris,kode_barang',
             'jumlah'            => 'required|integer|min:1',
             'divisi'            => 'required|string|max:255',
             'penanggungjawab'   => 'required|string|max:255',
@@ -75,7 +83,7 @@ class UserPeminjamanController extends Controller
 
         $peminjaman->update([
             'nama_peminjam'     => Auth::user()->name,
-            'nama_barang'       => $request->nama_barang,
+            'kode_barang'       => $request->kode_barang,
             'jumlah'            => $request->jumlah,
             'divisi'            => $request->divisi,
             'penanggungjawab'   => $request->penanggungjawab,

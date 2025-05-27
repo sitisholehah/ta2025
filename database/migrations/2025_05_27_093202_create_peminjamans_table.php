@@ -12,7 +12,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_peminjam');
             $table->string('nama_peminjam');
-            $table->string('nama_barang');
+
+            // Tambah kode_barang sebagai foreign key ke tabel inventaris
+            $table->string('kode_barang');
+
             $table->integer('jumlah');
             $table->string('divisi');
             $table->string('penanggungjawab');
@@ -21,8 +24,11 @@ return new class extends Migration
             $table->text('keterangan')->nullable();
             $table->timestamps();
 
-            // Optional: Tambahkan foreign key ke tabel users jika ada relasi
+            // Relasi ke users (jika kamu pakai users)
             // $table->foreign('id_peminjam')->references('id')->on('users')->onDelete('cascade');
+
+            // Foreign key ke tabel inventaris
+            $table->foreign('kode_barang')->references('kode_barang')->on('inventaris')->onDelete('restrict');
         });
     }
 

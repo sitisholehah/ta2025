@@ -79,62 +79,76 @@
         <div class="row">
             <div class="col-12 grid-margin">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">History Peminjaman</h4>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Peminjam</th>
-                                        <th>Kode Barang</th>
-                                        <th>Nama Barang</th>
-                                        <th>Tanggal Peminjaman</th>
-                                        <th>Tanggal Kembali</th>
-                                        <th>Kondisi Barang</th>
-                                        <th>Keterangan</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Natalia</td>
-                                        <td>02312</td>
-                                        <td>$14,500</td>
-                                        <td>04 Dec 2019</td>
-                                        <td>Dashboard</td>
-                                        <td>Baik</td>
-                                        <td>-</td>
-                                        <td><button class="btn btn-success btn-sm">Approved</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Sholehah</td>
-                                        <td>02312</td>
-                                        <td>$14,500</td>
-                                        <td>04 Dec 2019</td>
-                                        <td>Website</td>
-                                        <td>Baik</td>
-                                        <td>-</td>
-                                        <td><button class="btn btn-warning btn-sm">Pending</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Lucy</td>
-                                        <td>02312</td>
-                                        <td>$14,500</td>
-                                        <td>04 Dec 2019</td>
-                                        <td>App design</td>
-                                        <td>Baik</td>
-                                        <td>-</td>
-                                        <td><button class="btn btn-danger btn-sm">Rejected</button></td>
-                                    </tr>
-                                    <!-- Tambahkan data lainnya jika ada -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>Nama Peminjam</th>
+                            <th>Nama Barang</th>
+                            <th>jumlah</th>
+                            <th>divisi</th>
+                            <th>penanggungjawab</th>
+                            <th>tanggal pinjam</th>
+                            <th>tanggal kembali</th>
+                            <th>keterangan</th>
+                            <th>status</th>
+                            <th>aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($peminjamans as $item)
+                            <tr>
+                                <td>{{ $item->id_peminjam }}</td>
+                                <td>{{ $item->nama_peminjam }}</td>
+                                <td>{{ $item->nama_barang }}</td>
+                                <td>{{ $item->jumlah }}</td>
+                                <td>{{ $item->divisi}}</td>
+                                <td>{{ $item->penanggungjawab }}</td>
+                                <td>{{ $item->tanggal_pinjam }}</td>
+                                <td>{{ $item->tanggal_kembali }}</td>
+                                <td>{{ $item->keterangan }}</td>
+                                <td>{{ $item->status }}</td>
+                                
+                                <td><label class="badge bg-danger">Pending</label></td>
+                                <td>
+                                    <a href="{{ route('user.peminjaman.edit', $item->id) }}"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('user.peminjaman.destroy', $item->id) }}" method="POST"
+                                        style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus?')"
+                                            class="btn btn-danger btn-sm">Hapus</button>
+                                    </form>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            {{-- Pagination --}}
+            <div class="d-flex justify-content-end mt-3">
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Previous</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div> <!-- end card-body -->
+    </div>
                 </div>
             </div>
         </div>
