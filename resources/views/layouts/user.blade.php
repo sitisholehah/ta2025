@@ -145,7 +145,7 @@
                 </li> --}}
 
                 <li class="nav-item menu-items">
-                    <a class="nav-link" href="{{ route('peminjaman') }}">
+                    <a class="nav-link" href="{{ route('user.peminjaman') }}">
                         <span class="menu-icon">
                             <i class="mdi mdi-clipboard-arrow-right"></i>
                         </span>
