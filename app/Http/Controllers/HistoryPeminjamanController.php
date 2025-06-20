@@ -7,9 +7,9 @@ use App\Models\Peminjaman;
 use App\Models\User;
 use App\Models\Karyawan;
 use App\Models\Inventaris;
-use App\Models\HistoryPeminjaman; // Tambahkan model ini
+use App\Models\HistoryPeminjaman;
 
-class DashboardController extends Controller
+class HistoryPeminjamanController extends Controller
 {
     public function index()
     {
@@ -31,7 +31,7 @@ class DashboardController extends Controller
                 return HistoryPeminjaman::find($item->id);
             });
 
-        return view('admin.dashboard', compact(
+        return view('admin.history', compact(
             'peminjamans',
             'jumlahPeminjaman',
             'jumlahKaryawan',
@@ -40,3 +40,4 @@ class DashboardController extends Controller
         ));
     }
 }
+

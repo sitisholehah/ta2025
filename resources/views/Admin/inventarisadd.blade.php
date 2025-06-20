@@ -6,14 +6,14 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Informasi Inventaris</h4>
-                    <form class="forms-sample" action="{{ route('inventaris.store') }}" method="POST" enctype="multipart/form-data">
+                    <form class="forms-sample" action="{{ route('inventaris.store') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
-                       <div class="form-group">
+                        <div class="form-group">
                             <label for="kode_barang">ID</label>
-                            <input type="text" class="form-control" id="id" name="id"
-                                placeholder="ID">
+                            <input type="text" class="form-control" id="id" name="id" placeholder="ID">
                         </div>
-                       <div class="form-group">
+                        <div class="form-group">
                             <label for="kode_barang">Kode Barang</label>
                             <input type="text" class="form-control" id="kode_barang" name="kode_barang"
                                 placeholder="Kode Barang">
@@ -68,11 +68,12 @@
                             <input type="text" class="form-control" id="harga" name="harga"
                                 placeholder="Masukkan Harga">
                         </div>
-                        <div class="form-group">
-                            <label for="harga">Tempat Pembelian</label>
+                          <div class="form-group">
+                            <label for="tempat_pembelian">Tempat Pembelian</label>
                             <input type="text" class="form-control" id="tempat_pembelian" name="tempat_pembelian"
                                 placeholder="Masukkan Tempat Pembelian">
                         </div>
+
                         <div class="form-group">
                             <label for="penanggungjawab">Penanggung Jawab</label>
                             <select class="form-control" id="penanggungjawab" name="penanggungjawab">
@@ -93,13 +94,14 @@
                         </div>
                         <div class="form-group">
                             <label for="lokasi_barang">Lokasi Barang</label>
-                            <input type="text" class="form-control" id="lokasi_barang" name="lokasi_barang" placeholder="Lokasi Barang">
+                            <input type="text" class="form-control" id="lokasi_barang" name="lokasi_barang"
+                                placeholder="Lokasi Barang">
                         </div>
                         <div class="form-group">
-                            <label for="tanggal_expired_garansi">Tanggal Expired Garansi</label>
-                            <input type="date" class="form-control" id="tanggal_expired_garansi"
-                                name="tanggal_expired_garansi">
+                            <label for="tanggal_pembelian">Tanggal Expired Garansi</label>
+                            <input type="date" class="form-control" id="tanggal_expired_garansi" name="tanggal_expired_garansi">
                         </div>
+
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
                             <input type="text" class="form-control" id="keterangan" name="keterangan"

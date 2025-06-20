@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('inventaris', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_barang', 100 )->unique();
+            $table->string('kode_barang', 100)->unique();
             $table->string('nama_barang');
             $table->text('deskripsi_barang')->nullable();
             $table->string('kelompok_barang');
@@ -28,6 +29,7 @@ return new class extends Migration {
             $table->string('photo_serial')->nullable();
             $table->string('photo_nota')->nullable();
             $table->string('photo_lainnya')->nullable();
+           $table->string('status')->nullable();
             $table->timestamps();
         });
     }

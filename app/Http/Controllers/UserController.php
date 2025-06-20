@@ -11,15 +11,14 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     // Halaman dashboard user
-  public function index()
+ public function index()
 {
-    
     $user = Auth::user();
 
-   $inventaris = Inventaris::all();
+    // Gunakan query builder dan paginate misal 10 per halaman
+    $inventaris = Inventaris::paginate(10);
 
-
-    return view('anggota.dashboard', compact('inventaris'));
+    return view('anggota.inventaris', compact('inventaris'));
 }
 
 

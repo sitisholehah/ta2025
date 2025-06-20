@@ -1,4 +1,4 @@
-@extends('layouts.welcome')
+@extends('layouts.user')
 
 @section('content')
 
@@ -99,12 +99,7 @@
         <div class="card-body">
 
             {{-- Tombol Tambah Data --}}
-            <div class="d-flex justify-content-end mb-3 print-hide">
-                <a href="{{ route('inventaris.create') }}" class="btn btn-primary btn-sm">
-                    <i class="bi bi-plus-circle"></i> Tambah Data Baru
-                </a>
-            </div>
-
+           
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead class="table-light">
@@ -131,7 +126,7 @@
                             <th class="print-hide-column">Foto Nota</th>
                             <th class="print-hide-column">Foto Lainnya</th>
                             <th class="print-hide-column">Status</th>
-                            <th class="print-hide-column">Aksi</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -201,14 +196,7 @@
                                 </td>
 
                                 {{-- Aksi --}}
-                                <td class="print-hide-column">
-                                    <a href="{{ route('inventaris.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('inventaris.destroy', $item->id) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                                    </form>
-                                </td>
+                               
                             </tr>
                         @empty
                             <tr>

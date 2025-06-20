@@ -1,91 +1,79 @@
 @extends('layouts.user')
 
 @section('content')
-    <h3>Peminjaman</h3>
-    <div class="container mt-3">
-
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        {{-- Form Input Peminjaman --}}
-        
- @if (session('success'))
+    {{-- Notifikasi sukses --}}
+    @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+
     <div class="mb-3">
-        <h1 class="h3">Data Inventaris</h1>
-        <a href="{{ route('user.peminjaman.create') }}" class="btn btn-primary mb-3">Tambah Data Baru</a>
+        <h1 class="h3">Data Peminjaman</h1>
     </div>
+
     <div class="card">
         <div class="card-body">
+
+            {{-- Tombol Tambah Data Baru di atas kotak search --}}
+            <div class="mb-3 d-flex justify-content-end">
+                <a href="{{ route('user.peminjaman.create') }}" class="btn btn-primary">Tambah Data Baru</a>
+            </div>
+
+            {{-- Kotak Search --}}
+            <div class="mb-3 d-flex justify-content-end" style="max-width: 300px;">
+                <form action="{{ route('user.peminjaman') }}" method="GET" class="d-flex w-100">
+                    <input type="text" name="search" class="form-control me-2" placeholder="Cari data peminjam..." value="{{ request('search') }}">
+                    <button type="submit" class="btn btn-secondary">Cari</button>
+                </form>
+            </div>
+
+            {{-- Tabel --}}
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
-                    <thead>
+                <table class="table table-bordered table-striped align-middle text-nowrap">
+                    <thead class="table-dark">
                         <tr>
-                            <th>id</th>
+                            <th>No</th>
                             <th>Nama Peminjam</th>
                             <th>Nama Barang</th>
-                            <th>jumlah</th>
-                            <th>divisi</th>
-                            <th>penanggungjawab</th>
-                            <th>tanggal kpinjam</th>
-                            <th>tanggal kembali</th>
-                             <th>tanggal kembali</th>
+                            <th>Jumlah</th>
+                            <th>Divisi</th>
+                            <th>Penanggung Jawab</th>
+                            <th>Tanggal Pinjam</th>
+                            <th>Tanggal Kembali</th>
+                            <th>Keterangan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($peminjamans as $item)
                             <tr>
-                                <td>{{ $item->id_peminjam }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_peminjam }}</td>
-                                <td>{{ $item->nama_barang }}</td>
+                                <td>{{ $item->barang->nama_barang ?? '-' }}</td>
                                 <td>{{ $item->jumlah }}</td>
-                                <td>{{ $item->divisi}}</td>
+                                <td>{{ $item->divisi }}</td>
                                 <td>{{ $item->penanggungjawab }}</td>
                                 <td>{{ $item->tanggal_pinjam }}</td>
                                 <td>{{ $item->tanggal_kembali }}</td>
                                 <td>{{ $item->keterangan }}</td>
                                 <td>{{ $item->status }}</td>
-                                
-                                <td><label class="badge bg-danger">Pending</label></td>
                                 <td>
-                                    <a href="{{ route('user.peminjaman.edit', $item->id) }}"
-                                        class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('user.peminjaman.destroy', $item->id) }}" method="POST"
-                                        style="display:inline-block;">
+                                    <a href="{{ route('user.peminjaman.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('user.peminjaman.destroy', $item->id) }}" method="POST" style="display:inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus?')"
-                                            class="btn btn-danger btn-sm">Hapus</button>
+                                        <button type="submit" onclick="return confirm('Yakin ingin menghapus?')" class="btn btn-danger btn-sm">Hapus</button>
                                     </form>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            {{-- Pagination --}}
+
             <div class="d-flex justify-content-end mt-3">
-                <nav>
-                    <ul class="pagination pagination-sm mb-0">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Previous</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                {!! $peminjamans->links('pagination::bootstrap-5') !!}
             </div>
-        </div> <!-- end card-body -->
+        </div>
     </div>
-    </div>
-
-
 @endsection

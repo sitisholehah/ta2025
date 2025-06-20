@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.welcome')
 
 @section('content')
     <h3>Tambah Peminjaman</h3>
@@ -7,7 +7,7 @@
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
-        <form action="{{ route('user.peminjaman.store') }}" method="POST">
+        <form action="{{ route('peminjaman.store') }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -90,7 +90,7 @@
                 <select name="status" id="status" class="form-control" required>
                     <option value="">-- Pilih Status --</option>
                     <option value="Dipinjam" {{ old('status') == 'Dipinjam' ? 'selected' : '' }}>Dipinjam</option>
-                   
+                    <option value="Dikembalikan" {{ old('status') == 'Dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
                 </select>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>
@@ -98,7 +98,7 @@
             </div>
 
             <button type="submit" class="btn btn-success">Simpan</button>
-            <a href="{{ route('user.peminjaman') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('peminjaman.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
 @endsection

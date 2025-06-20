@@ -1,4 +1,4 @@
-@extends('layouts.welcome')
+@extends('layouts.user')
 
 @section('content')
     <div class="container mt-2">

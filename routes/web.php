@@ -11,7 +11,10 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController; // Jangan lupa import controller profil
+use App\Http\Controllers\TodoController;
 use App\Models\Inventaris;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\HistoryPeminjamanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +38,9 @@ Route::middleware('auth')->group(function () {
     //    Route::get('/anggota/dashboard', [UserController::class, 'index'])->middleware('role:2');
 
 
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+     Route::get('/history-peminjaman', [HistoryPeminjamanController::class, 'index'])->name('history.index');
+
 
     // Routes Karyawan
     Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan');
@@ -46,17 +51,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/karyawan/{id_karyawan}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 
     // Routes Peminjaman
-    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman');
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+    Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
     Route::post('/peminjaman/{id}/kembalikan', [PeminjamanController::class, 'updateStatus'])->name('peminjaman.kembalikan');
     Route::get('/peminjaman/{id}/edit', [PeminjamanController::class, 'edit'])->name('peminjaman.edit');
     Route::put('/peminjaman/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
     Route::delete('/peminjaman/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
-    // Untuk User
-// Route::middleware(['auth', 'role:1,2'])->group(function () {
+    Route::post('/peminjaman/{id}/kembalikan', [PeminjamanController::class, 'updateStatus'])->name('peminjaman.kembalikan');
 
-// });
-    
+    // Untuk User
+    // Route::middleware(['auth', 'role:1,2'])->group(function () {
+
+    // });
+
 
     // Routes Inventaris
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris');
@@ -68,13 +76,20 @@ Route::middleware('auth')->group(function () {
 
 
     // Tambahkan routes Profil & Ganti Password
-    Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
-    Route::post('/profile/settings/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
+        Route::put('/profile/settings', [ProfileController::class, 'update'])->name('profile.update'); // <- ini tambahan penting
+        Route::post('/profile/settings/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+        Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.updatePhoto');
+        Route::post('/profile/update-name', [ProfileController::class, 'updateName'])->name('profile.updateName');
+
+    });
 });
 
 // Untuk user yang sudah login (role anggota)
 Route::middleware(['auth'])->prefix('anggota')->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('anggota.dashboard');
+  
     Route::get('/profile', [UserController::class, 'profile'])->name('anggota.UserDetail');
     Route::post('/profile/update', [UserController::class, 'profileUpdate'])->name('anggota.profile.update');
     Route::get('/user/{slug}', [UserController::class, 'show'])->name('anggota.user.show');
@@ -86,3 +101,5 @@ Route::middleware(['auth'])->prefix('anggota')->group(function () {
     Route::put('/user/peminjaman/{id}', [UserPeminjamanController::class, 'update'])->name('user.peminjaman.update');
     Route::delete('/user/peminjaman/{id}', [UserPeminjamanController::class, 'destroy'])->name('user.peminjaman.destroy');
 });
+
+

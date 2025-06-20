@@ -4,21 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
-    // Tampilkan halaman settings profil
-    public function settings()
+    public function __construct()
     {
-        $user = auth()->user();
-        return view('profile.settings', compact('user'));
+        $this->middleware('auth');
     }
 
-    // Proses update password
+    /**
+     * Tampilkan halaman pengaturan profil
+     */
+    public function settings()
+    {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        return view('admin.settings', compact('user'));
+    }
+
+    /**
+     * Proses update password
+     */
     public function updatePassword(Request $request)
     {
-        // Validasi input
+        /** @var User $user */
+        $user = $request->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         $request->validate([
             'current_password' => ['required'],
             'new_password' => ['required', 'string', 'min:6', 'confirmed'],
@@ -29,19 +52,72 @@ class ProfileController extends Controller
             'new_password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        $user = $request->user();
-
-        // Cek password lama
         if (!Hash::check($request->current_password, $user->password)) {
             throw ValidationException::withMessages([
                 'current_password' => ['Password lama tidak cocok.'],
             ]);
         }
 
-        // Update password baru
         $user->password = Hash::make($request->new_password);
         $user->save();
 
         return redirect()->route('profile.settings')->with('status', 'Password berhasil diubah!');
     }
+
+    /**
+     * Proses upload/update foto profil
+     */
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        if ($request->hasFile('photo')) {
+            if ($user->photo && file_exists(public_path('assets/foto/' . $user->photo))) {
+                unlink(public_path('assets/foto/' . $user->photo));
+            }
+
+            $file = $request->file('photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('assets/foto'), $filename);
+
+            $user->photo = $filename;
+            $user->save();
+
+            return back()->with('status', 'Foto profil berhasil diupdate!');
+        }
+
+        return back()->withErrors(['photo' => 'Foto profil gagal diupload.']);
+    }
+
+    /**
+     * Proses update username
+     */
+    public function updateName(Request $request)
+{
+    /** @var User $user */
+    $user = Auth::user();
+
+    if (!$user) {
+        return redirect()->route('login');
+    }
+
+    $request->validate([
+        'name' => 'required|string|max:255|unique:users,name,' . $user->id,
+    ]);
+
+    $user->name = $request->name;
+    $user->save();
+
+    return redirect()->route('profile.settings')->with('status', 'Nama berhasil diperbarui!');
+}
+
 }

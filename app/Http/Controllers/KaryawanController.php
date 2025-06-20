@@ -7,27 +7,41 @@ use App\Models\Karyawan;
 
 class KaryawanController extends Controller
 {
-    // Tampilkan semua data karyawan
-    public function index()
+    public function index(Request $request)
     {
-        $karyawan = Karyawan::all();
+        $search = $request->input('search');
+
+        $query = Karyawan::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('id_karyawan', 'like', "%{$search}%")
+                  ->orWhere('nama_karyawan', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%")
+                  ->orWhere('divisi', 'like', "%{$search}%")
+                  ->orWhere('no_hp', 'like', "%{$search}%")
+                  ->orWhere('alamat', 'like', "%{$search}%");
+            });
+        }
+
+        $karyawan = $query->paginate(10)->appends(['search' => $search]);
+
         return view('Admin.karyawan', compact('karyawan'));
     }
 
-    // Tampilkan form tambah karyawan
     public function create()
     {
         return view('Admin.karyawanadd');
     }
 
-    // Simpan data karyawan baru
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'id_karyawan'     => 'required|string|max:50',
+            'id_karyawan'     => 'required|string|max:50|unique:karyawans,id_karyawan',
             'nama_karyawan'   => 'required|string|max:255',
             'jabatan'         => 'required|string|max:255',
-            'no_hp'           => 'nullable|string',
+            'divisi'          => 'required|string|max:255',
+            'no_hp'           => 'nullable|string|max:20',
             'alamat'          => 'nullable|string',
         ]);
 
@@ -36,20 +50,19 @@ class KaryawanController extends Controller
         return redirect()->route('karyawan')->with('success', 'Data karyawan berhasil disimpan.');
     }
 
-    // Tampilkan form edit karyawan
     public function edit($id)
     {
         $karyawan = Karyawan::where('id_karyawan', $id)->firstOrFail();
         return view('Admin.karyawanedit', compact('karyawan'));
     }
 
-    // Simpan perubahan data karyawan
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'nama_karyawan' => 'required|string|max:255',
             'jabatan'       => 'required|string|max:255',
-            'no_hp'         => 'nullable|string',
+            'divisi'        => 'required|string|max:255',
+            'no_hp'         => 'nullable|string|max:20',
             'alamat'        => 'nullable|string',
         ]);
 
@@ -59,7 +72,6 @@ class KaryawanController extends Controller
         return redirect()->route('karyawan')->with('success', 'Data karyawan berhasil diperbarui.');
     }
 
-    // Hapus data karyawan
     public function destroy($id)
     {
         $karyawan = Karyawan::where('id_karyawan', $id)->firstOrFail();

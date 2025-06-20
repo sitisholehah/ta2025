@@ -12,18 +12,11 @@ return new class extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::create('penanggungjawab', function (Blueprint $table) {
-        $table->string('id')->primary(); // <-- BUKAN auto-increment
-        $table->string('nama');
-        $table->string('email')->unique();
-        $table->string('telepon');
-        $table->timestamps();
-    });
-}
-
-    
-    
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('photo')->nullable()->after('email'); // kamu bisa ubah 'after' sesuai posisi yang diinginkan
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -32,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('penanggungjawab');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('photo');
+        });
     }
 };

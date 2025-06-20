@@ -5,104 +5,126 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use App\Models\Inventaris;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Karyawan;
 
 class UserPeminjamanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data peminjaman milik user yang sedang login + relasi inventaris
-        $peminjamans = Peminjaman::with('inventaris')
-            ->where('id_peminjam', Auth::id())
-            ->get();
-
+        $query = Peminjaman::with('barang', 'peminjam');
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_peminjam', 'like', '%' . $search . '%')
+                    ->orWhere('divisi', 'like', '%' . $search . '%')
+                    ->orWhere('penanggungjawab', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%')
+                    ->orWhereHas('barang', function ($q2) use ($search) {
+                        $q2->where('nama_barang', 'like', '%' . $search . '%');
+                    });
+            });
+        }
+        $peminjamans = $query->paginate(10);
+        $peminjamans->appends($request->only('search'));
         return view('anggota.peminjaman', compact('peminjamans'));
     }
 
     public function create()
     {
-        // Ambil semua data barang dari inventaris untuk dropdown
         $inventaris = Inventaris::all();
-
-        return view('anggota.peminjamanadd', compact('inventaris'));
+        $karyawans = Karyawan::all();
+        return view('anggota.peminjamanadd', compact('inventaris', 'karyawans'));
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'kode_barang'       => 'required|exists:inventaris,kode_barang',
-        'jumlah'            => 'required|integer|min:1',
-        'divisi'            => 'required|string|max:255',
-        'penanggungjawab'   => 'required|string|max:255',
-        'tanggal_pinjam'    => 'required|date',
-        'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
-        'keterangan'        => 'nullable|string',
-    ]);
+    {
+        $request->validate([
+            'id_peminjam' => 'required|exists:karyawans,id_karyawan',
+            'kode_barang' => 'required|exists:inventaris,kode_barang',
+            'jumlah' => 'required|integer|min:1',
+            'divisi' => 'required|string|max:255',
+            'penanggungjawab' => 'required|string|max:255',
+            'tanggal_pinjam' => 'required|date',
+            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
+            'status' => 'required|in:Dipinjam,Dikembalikan',
+            'keterangan' => 'nullable|string',
+        ]);
 
-    Peminjaman::create([
-        'id_peminjam'       => Auth::id(),
-        'nama_peminjam'     => Auth::user()->name, 
-        'kode_barang'       => $request->kode_barang,
-        'jumlah'            => $request->jumlah,
-        'divisi'            => $request->divisi,
-        'penanggungjawab'   => $request->penanggungjawab,
-        'tanggal_pinjam'    => $request->tanggal_pinjam,
-        'tanggal_kembali'   => $request->tanggal_kembali,
-        'keterangan'        => $request->keterangan,
-    ]);
+        $karyawan = Karyawan::where('id_karyawan', $request->id_peminjam)->firstOrFail();
 
-    return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil ditambahkan.');
-}
+        Peminjaman::create([
+            'id_peminjam' => $karyawan->id_karyawan,
+            'nama_peminjam' => $karyawan->nama_karyawan,
+            'kode_barang' => $request->kode_barang,
+            'jumlah' => $request->jumlah,
+            'divisi' => $request->divisi,
+            'penanggungjawab' => $request->penanggungjawab,
+            'tanggal_pinjam' => $request->tanggal_pinjam,
+            'tanggal_kembali' => $request->tanggal_kembali,
+            'status' => $request->status,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil ditambahkan.');
+    }
 
     public function edit($id)
     {
-        $peminjaman = Peminjaman::where('id', $id)
-            ->where('id_peminjam', Auth::id())
-            ->firstOrFail();
-
-        $inventaris = Inventaris::all(); // Untuk dropdown pilihan barang
-
-        return view('anggota.peminjaman_edit', compact('peminjaman', 'inventaris'));
+        $peminjaman = Peminjaman::findOrFail($id);
+        $inventaris = Inventaris::all();
+        $karyawans = Karyawan::all();
+        return view('anggota.peminjamanedit', compact('peminjaman', 'inventaris', 'karyawans'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kode_barang'       => 'required|exists:inventaris,kode_barang',
-            'jumlah'            => 'required|integer|min:1',
-            'divisi'            => 'required|string|max:255',
-            'penanggungjawab'   => 'required|string|max:255',
-            'tanggal_pinjam'    => 'required|date',
-            'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
-            'keterangan'        => 'nullable|string',
+            'id_peminjam' => 'required|exists:karyawans,id_karyawan',
+            'kode_barang' => 'required|exists:inventaris,kode_barang',
+            'jumlah' => 'required|integer|min:1',
+            'divisi' => 'required|string|max:255',
+            'penanggungjawab' => 'required|string|max:255',
+            'tanggal_pinjam' => 'required|date',
+            'tanggal_kembali' => 'required|date|after_or_equal:tanggal_pinjam',
+            'status' => 'required|in:Dipinjam,Dikembalikan',
+            'keterangan' => 'nullable|string',
         ]);
 
-        $peminjaman = Peminjaman::where('id', $id)
-            ->where('id_peminjam', Auth::id())
-            ->firstOrFail();
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        $karyawan = Karyawan::findOrFail($request->id_peminjam);
 
         $peminjaman->update([
-            'nama_peminjam'     => Auth::user()->name,
-            'kode_barang'       => $request->kode_barang,
-            'jumlah'            => $request->jumlah,
-            'divisi'            => $request->divisi,
-            'penanggungjawab'   => $request->penanggungjawab,
-            'tanggal_pinjam'    => $request->tanggal_pinjam,
-            'tanggal_kembali'   => $request->tanggal_kembali,
-            'keterangan'        => $request->keterangan,
+            'id_peminjam' => $karyawan->id_karyawan,
+            'nama_peminjam' => $karyawan->nama_karyawan,
+            'kode_barang' => $request->kode_barang,
+            'jumlah' => $request->jumlah,
+            'divisi' => $request->divisi,
+            'penanggungjawab' => $request->penanggungjawab,
+            'tanggal_pinjam' => $request->tanggal_pinjam,
+            'tanggal_kembali' => $request->tanggal_kembali,
+            'status' => $request->status,
+            'keterangan' => $request->keterangan,
         ]);
 
-        return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil diperbarui.');
+        return redirect()->route('user.peminjaman')->with('success', 'Data peminjaman berhasil diperbarui.');
     }
-
     public function destroy($id)
-    {
-        $peminjaman = Peminjaman::where('id', $id)
-            ->where('id_peminjam', Auth::id())
-            ->firstOrFail();
+{
+    $peminjaman = Peminjaman::findOrFail($id);
 
-        $peminjaman->delete();
-
-        return redirect()->route('user.peminjaman')->with('success', 'Peminjaman berhasil dihapus.');
+    // Optional: sebelum hapus, bisa cek atau update status inventaris jika perlu
+    // Misal kalau ingin set status inventaris jadi 'Tersedia' jika barang sudah dikembalikan
+    if ($peminjaman->status === 'Dipinjam') {
+        $inventaris = Inventaris::where('kode_barang', $peminjaman->kode_barang)->first();
+        if ($inventaris) {
+            $inventaris->status = 'Tersedia';
+            $inventaris->save();
+        }
     }
+
+    $peminjaman->delete();
+
+    return redirect()->route('user.peminjaman')->with('success', 'Data peminjaman berhasil dihapus.');
+}
 }

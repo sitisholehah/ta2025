@@ -10,12 +10,9 @@ return new class extends Migration
     {
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_peminjam');
+            $table->unsignedBigInteger('id_peminjam'); // FK ke karyawans.id_karyawan
             $table->string('nama_peminjam');
-
-            // Tambah kode_barang sebagai foreign key ke tabel inventaris
-            $table->string('kode_barang');
-
+            $table->string('kode_barang'); // FK ke inventaris.kode_barang
             $table->integer('jumlah');
             $table->string('divisi');
             $table->string('penanggungjawab');
@@ -24,10 +21,7 @@ return new class extends Migration
             $table->text('keterangan')->nullable();
             $table->timestamps();
 
-            // Relasi ke users (jika kamu pakai users)
-            // $table->foreign('id_peminjam')->references('id')->on('users')->onDelete('cascade');
-
-            // Foreign key ke tabel inventaris
+            $table->foreign('id_peminjam')->references('id_karyawan')->on('karyawans')->onDelete('restrict');
             $table->foreign('kode_barang')->references('kode_barang')->on('inventaris')->onDelete('restrict');
         });
     }

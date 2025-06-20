@@ -27,6 +27,10 @@
             <label for="jabatan" class="form-label">Jabatan</label>
             <input type="text" name="jabatan" class="form-control" value="{{ $karyawan->jabatan }}" required>
         </div>
+        <div class="mb-3">
+            <label for="divisi" class="form-label">Divisi</label>
+            <input type="text" name="divisi" class="form-control" value="{{ $karyawan->divisi }}" required>
+        </div>
 
         <div class="mb-3">
             <label for="no_hp" class="form-label">No HP</label>

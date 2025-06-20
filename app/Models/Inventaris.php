@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Peminjaman;
 
 class Inventaris extends Model
 {
     use HasFactory;
 
-    protected $table = 'inventaris'; // pastikan sesuai nama tabel
+    protected $table = 'inventaris';
     protected $primaryKey = 'id';
-    public $incrementing = false; // kalau id_karyawan bukan auto-increment
-    protected $keyType = 'string'; // sesuaikan, misal jika ID-nya pakai teks
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
@@ -36,5 +37,17 @@ class Inventaris extends Model
         'photo_serial',
         'photo_nota',
         'photo_lainnya',
+        'status',
     ];
+
+    public function peminjamanAktif()
+    {
+        return $this->hasOne(Peminjaman::class, 'kode_barang', 'kode_barang')
+            ->where('status', 'Dipinjam');
+    }
+
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class, 'kode_barang', 'kode_barang');
+    }
 }

@@ -25,6 +25,11 @@
                                 placeholder="Masukkan Jabatan">
                         </div>
                         <div class="form-group">
+                            <label for="divisi">Divisi</label>
+                            <input type="text" class="form-control" id="divisi" name="divisi"
+                                placeholder="Masukkan Divisi">
+                        </div>
+                        <div class="form-group">
                             <label for="no_hp">No. HP</label>
                             <input type="text" class="form-control" id="no_hp" name="no_hp"
                                 placeholder="Masukkan Nomor HP">
